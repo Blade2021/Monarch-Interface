@@ -1,13 +1,14 @@
-//import processing.serial.*;
+import processing.serial.*;
 import controlP5.*;
 import java.io.*;
 
-//Serial myPort;
+Serial myPort;
 ControlP5 cp5;
 int waitTime = 500;
 boolean connectionStatus = false;
 String fileName = "textfile.txt";
-char endChar = '\n';
+char newLine = '\n';
+char carriageReturn = '\r';
 boolean stopTrigger = false;
 Textarea consoletext;
 Println console;
@@ -85,6 +86,8 @@ void setup()
 
     ;
 
+  myPort = new Serial(this, "COM9", 9600);
+  myPort.bufferUntil('\n');
   console = cp5.addConsole(consoletext);
   println("SYSTEM: GUI Loaded");
 }
@@ -113,7 +116,7 @@ void sendCode() {
     
     String strLine;
     while (((strLine = br.readLine()) != null) && (stopTrigger != true)){
-      //myPort.write(strLine +endChar);
+      myPort.write(strLine +carriageReturn +newLine);
       println("Sent: " +strLine);
       delay(waitTime);
     }
